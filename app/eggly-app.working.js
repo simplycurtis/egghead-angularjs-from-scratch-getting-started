@@ -57,6 +57,30 @@ angular.module('Eggly', [
   }
 
   $scope.createBookmark = createBookmark;
+  $scope.editedBookmark = null;
+
+  function setEditedBookmark(bookmark) {
+    $scope.editedBookmark = angular.copy(bookmark);
+  }
+
+  function updateBookmark(bookmark) {
+    var index = _.findIndex($scope.bookmarks, function(b) {
+      return b.id == bookmark.id;
+    });
+    console.log($scope.bookmarks[index]);
+    $scope.bookmarks[index] = bookmark;
+
+    $scope.editedBookmark = null;
+    $scope.isEditing = false;
+  }
+
+  function isSelectedBookmark(bookmarkId){
+    return $scope.editedBookmark !== null && $scope.editedBookmark.id === bookmarkId;
+  }
+
+  $scope.setEditedBookmark = setEditedBookmark;
+  $scope.updateBookmark = updateBookmark;
+  $scope.isSelectedBookmark = isSelectedBookmark;
 
   //-----------------------------------
   // creating and editing states
@@ -82,7 +106,8 @@ angular.module('Eggly', [
   }
 
   function cancelEditing() {
-    $scope.isEditing = false;  
+    $scope.isEditing = false; 
+    $scope.editedBookmark = null;
   }
 
   function shouldShowCreating() {
